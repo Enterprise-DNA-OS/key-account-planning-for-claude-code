@@ -60,7 +60,7 @@ try{
  const actBefore=(await db.query('select count(*)::int n from activity'))[0].n;
  ok((await call([...imp,'--dry-run'])).inserted_accounts===2);ok((await db.query('select count(*)::int n from accounts'))[0].n===before);ok((await db.query('select count(*)::int n from activity'))[0].n===actBefore);
  ok((await call(imp)).inserted_contacts===1);ok((await call(imp)).repeat);
- const imported=(await db.query('select * from stakeholders where source_id=$1',['003000000000001AAA']))[0];ok(imported.raw.CustomNote__c==='Line one\nLine two');ok(imported.influence==='unknown');
+ const imported=(await db.query('select * from stakeholders where source_id=$1',['003000000000001AAA']))[0];ok(imported.raw.CustomNote__c===parseCsv(fs.readFileSync(contactFile,'utf8'))[0].CustomNote__c);ok(imported.raw.CustomNote__c.replaceAll('\r\n','\n')==='Line one\nLine two');ok(imported.influence==='unknown');
  await assert.rejects(()=>db.query('update imports set updated_at=now()'),/append-only/);checks++;
  const conflict=file('conflict.csv','Id,Name,OwnerId\n001000000000009AAA,New,Owner\n001000000000001AAA,Changed,Owner\n');
  await fail(['import','demandfarm','--accounts='+conflict,'--currency=NZD',actor],/Conflicting/);ok(!(await db.query("select id from accounts where source_id='001000000000009AAA'")).length);
@@ -70,7 +70,7 @@ try{
  ok(!(await db.query("select id from accounts where source_id='001000000000008AAA'")).length);
  await fail(['import','demandfarm','--accounts='+dup,actor],/currency/);
  assert.throws(()=>parseCsv('Id,Id\na,b'),/unique/);checks++;assert.throws(()=>parseCsv('Id,Name\na,"unterminated'),/unclosed/);checks++;assert.throws(()=>parseCsv('Id,Name\na'),/expected/);checks++;
- ok(parseCsv('\ufeffId,Name\r\na,"one, two"\r\n')[0].Name==='one, two');
+ ok(parseCsv('\ufeffId,Name\r\na,"one, two"\r\n')[0].Name==='one, two');ok(parseCsv('Id,Name\r\na,"line one\r\nline two"\r\n')[0].Name==='line one\r\nline two');
  for(const cmd of ['draft-account-plan','draft-review-agenda']){const out=await call([cmd,'A-T']);const html=fs.readFileSync(out.file,'utf8');ok(html.includes('&lt;script&gt;'));ok(!html.includes('<script>'));}
  ok(fs.existsSync((await call(['weekly-review'])).file));
  const snapshot=path.join(tmp,'snapshot.json');const out=await call(['export','--out='+snapshot]);ok(out.counts.accounts===6);ok(JSON.parse(fs.readFileSync(snapshot)).imports[0].files.accounts.includes('Example'));
