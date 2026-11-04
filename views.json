@@ -1,13 +1,40 @@
 [
   {
     "name": "week",
-    "title": "This week",
-    "subtitle": "Key Account Planning for Claude Code: what needs attention, rendered by npm run view",
+    "title": "Key account review week",
     "sections": [
       {
-        "title": "Needs attention",
-        "note": "TODO(author): point this at the industry's attention view (overdue, stuck, quiet).",
-        "sql": "select 'replace me' as item, 'TODO(author)' as why"
+        "title": "Account review queue",
+        "sql": "select code,name,owner,review_due,review_status from account_portfolio where status='active' order by review_due nulls first"
+      },
+      {
+        "title": "Open actions",
+        "sql": "select account,name,owner,due,attention from action_queue where status='open' order by due"
+      }
+    ]
+  },
+  {
+    "name": "relationships",
+    "title": "Relationship coverage",
+    "sections": [
+      {
+        "title": "Account coverage",
+        "sql": "select name,decision_makers,quiet_contacts,overdue_actions from account_portfolio order by code"
+      },
+      {
+        "title": "Relationships needing attention",
+        "sql": "select account,name,title,influence,last_contact,attention from relationship_gaps where status='active' order by account,name"
+      }
+    ]
+  },
+  {
+    "name": "whitespace",
+    "title": "Account growth coverage",
+    "sections": [
+      {
+        "title": "Known and unknown coverage",
+        "note": "Potential is a planning estimate, not booked revenue. Currency stays on every row. A blank estimate is unknown.",
+        "sql": "select account,business_unit,product,status,competitor,potential_cents,currency,attention from whitespace order by account,code"
       }
     ]
   }

@@ -1,24 +1,9 @@
 # Why there is no front end
 
-DemandFarm is a database with a subscription. The tables underneath it are ordinary: a few entities, a few relationships, a handful of workflows you repeat every week. What you pay for is the layer on top that lets people who do not write SQL get at those tables. Screens, filters, dashboards, forms.
+Account planning is a cycle of review, evidence and follow-through. The records matter: who decides, which part of the account is served, which action is due and what the customer agreed. This base lets a trusted operator maintain those records through the CLI or a coding agent.
 
-That layer used to be the whole product, because talking to a database was hard. It is not hard any more. Open this folder in Claude Code, describe what you want, and it writes the query, runs it, and explains the answer. Ask a question the dashboard never had a chart for and you still get an answer.
+Read-only HTML gives the owner the weekly position, relationship coverage and account plan. It does not offer drag-and-drop stakeholder maps, simultaneous visual editing, mobile data entry, a hosted login or live Salesforce synchronization. Local PGlite works offline for commands and reports, but the coding agent and remote connections have their own network requirements. PostgreSQL needs a connection.
 
-## What you gain
+A database is not the whole of DemandFarm's service. Interactive planning, connected guidance and collaboration have value. This base fits teams whose recurring work is the owned record and weekly review. Enterprise DNA can build the interfaces and connections that an installed version needs. Scope those before committing to a replacement.
 
-- **Better answers.** A dashboard shows what the vendor decided to chart. Here you ask your own question, in your own words, and get it answered against your own data.
-- **No seats.** Everyone who needs to look can look. The bill does not grow with headcount.
-- **Your data in your Postgres.** Plain tables. Back them up, query them from anything, leave any time. There is no export step because there is nothing to leave.
-- **A process that matches you.** When your way of working changes, you add a command. You do not wait for a feature request to clear.
-
-## What you give up
-
-- **A visual board.** Stages are a table you ask about, not cards you drag.
-- **A phone app.** It runs where Claude Code runs.
-- **A vendor help desk.** This is open source. Enterprise DNA supports the installed version for businesses that want someone to call.
-
-## Who this fits
-
-Small teams who already use Claude Code, or who would rather learn to ask than learn another interface. If your team needs a screen to look at all day, keep DemandFarm. If you need the answers more than the screens, this is cheaper, faster and yours.
-
-Installed and run for you: https://enterprisedna.co/omni/instead-of/demandfarm
+There is no bundled multi-user access layer. The operator owns the database, generated documents, exports and backups. Plan access, corrections, retention and recovery before moving live records.

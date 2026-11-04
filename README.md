@@ -1,115 +1,125 @@
-<h1 align="center">Key Account Planning for Claude Code</h1>
+# Key Account Planning for Claude Code
 
-<p align="center">
-  <strong>The open-source key account planning system that is just a database and Claude Code.</strong>
-</p>
+Keep account growth plans, stakeholder coverage, product gaps and quarterly reviews in a database you own.
 
-<p align="center">
-  Created by <a href="https://www.enterprisedna.co"><strong>Enterprise DNA</strong></a>. Free and open source. Works with Claude Code, Codex, OpenCode or Cursor.
-</p>
+## Three ways to own it
 
-<!-- three-doors -->
-<table align="center">
-  <tr>
-    <td align="center"><strong>Do it yourself</strong><br/>Clone it, run it, own it. Free, MIT.<br/><a href="#quick-start">Quick start</a></td>
-    <td align="center"><strong>We customise it</strong><br/>Your fields, your rules, your DemandFarm data brought across.<br/><a href="https://enterprisedna.co/omni/book/?utm_source=github&utm_medium=readme&utm_campaign=demandfarm">Book a call</a></td>
-    <td align="center"><strong>We run it for you</strong><br/>Installed, connected and operated inside Omni. Setup fee, then a retainer.<br/><a href="https://enterprisedna.co/omni/instead-of/demandfarm?utm_source=github&utm_medium=readme&utm_campaign=demandfarm">How it works</a></td>
-  </tr>
-</table>
+- **Do it yourself:** this MIT-licensed base runs with Claude Code, Codex, OpenCode or Cursor. Agent subscriptions and hosting are separate.
+- **We customise it:** Enterprise DNA maps the agreed DemandFarm history, adapts your account rules and builds the connections, web front end or different stack you need. One setup fee, then a retainer for ongoing work.
+- **We run it for you:** Omni by Enterprise DNA installs your version, manages access and backups and prepares the weekly account review. One setup fee, then a retainer.
 
-<p align="center">
-  <a href="#what-is-this">What is this</a> &bull;
-  <a href="#why-no-front-end">Why no front end</a> &bull;
-  <a href="#quick-start">Quick start</a> &bull;
-  <a href="#the-commands">Commands</a> &bull;
-  <a href="#instead-of-demandfarm">Instead of DemandFarm</a> &bull;
-  <a href="#want-it-installed-and-run-for-you">Installed for you</a> &bull;
-  <a href="#license">License</a>
-</p>
+[Book a 30-minute call with Sam](https://enterprisedna.co/omni/book/?offer=replace-software&utm_source=github&utm_medium=readme&utm_campaign=demandfarm).
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Node-20+-339933?style=flat-square" alt="Node 20+" />
-  <img src="https://img.shields.io/badge/PostgreSQL-any-336791?style=flat-square" alt="PostgreSQL" />
-  <img src="https://img.shields.io/badge/PGlite-embedded-3ecf8e?style=flat-square" alt="PGlite" />
-  <img src="https://img.shields.io/badge/License-MIT-yellow?style=flat-square" alt="MIT License" />
-</p>
+## Run the synthetic demo
 
----
+Node 20 or newer. No cloud account is needed.
 
-## What is this
-
-Key Account Planning for Claude Code does the job you pay DemandFarm for, as a Postgres database and a set of agent commands. There is no web front end. You open the folder in [Claude Code](https://claude.com/claude-code) (or Codex, OpenCode, Cursor: see `AGENTS.md`) and ask for what you want in plain language. It runs the right query, and it can answer questions the DemandFarm dashboard cannot.
-
-<!-- TODO(author): the annual bill. One sentence: what a 10 to 50 person business typically pays DemandFarm per year, all in, with a source. -->
-
-Want the same thing with a web front end, or built on a different stack? That is a customisation, and it is exactly what Enterprise DNA does: [book a call](https://enterprisedna.co/omni/book/?utm_source=github&utm_medium=readme&utm_campaign=demandfarm).
-
-<!-- TODO(author): two or three sentences on what this specific product covers and who it is for. -->
-
-## Why no front end
-
-- The front end was only ever there because the database was hard to talk to. That is no longer true.
-- Your data sits in plain Postgres tables you own. Any tool can read them. No export, no lock-in.
-- No seats, no tiers, no add-ons. Read [docs/why-no-front-end.md](docs/why-no-front-end.md) for the honest trade-offs too.
-
-## Quick start
-
-Sixty seconds, no database install (an embedded Postgres runs inside Node):
-
-```bash
-git clone https://github.com/Enterprise-DNA-OS/key-account-planning-for-claude-code.git
-cd key-account-planning-for-claude-code
+```sh
 npm install
+npm test
 npm run demo
+npm run accounts -- portfolio
+npm run accounts -- whitespace --json
+npm run accounts -- relationship-gaps
+npm run view
+npm run docs
 ```
 
-Then open the folder in Claude Code and type a slash command. <!-- TODO(author): name the first command to try. -->
+The fictional accounts include an overdue review, a quiet champion, missing decision-maker coverage, unserved units, unknown estimates and missed actions. Seeding is idempotent and preserves existing records. Use a fresh DATA_DIR for real work and never seed the working database. DATABASE_URL selects PostgreSQL; without it the local PGlite database lives in .data/db.
 
-### Use it with your own Postgres or Supabase
+## What the base does
 
-Copy `.env.example` to `.env`, set `DATABASE_URL`, then `npm run migrate`. Same commands, shared data, no per-seat fee.
+Nine record types and five views support the weekly account-planning cycle. A product's position in each business unit is ours, competitor, unserved or unknown. Potential is an optional planning estimate in the account's currency, never pipeline or booked revenue. Unknown does not become zero. The system does not add currencies together.
 
-## The commands
+Growth plays have owners, dates and success measures. Actions must belong to an open play and any linked stakeholder must belong to the same account. A play cannot close with outstanding actions. A quarterly review preserves the plan as it stood and sets the next review date. Departed contacts stop counting towards active decision-maker coverage. Every mutation records the supplied operator label and its result. Reviews, interactions, imports and the activity record are append-only through ordinary writes.
 
-<!-- TODO(author): a table of the slash commands in .claude/commands and what each one does. -->
+The five recurring rituals are review preparation, relationship coverage, whitespace review, growth-play follow-through and the weekly account review. This is an independent implementation of those owned-record workflows. DemandFarm also provides interactive mapping, connected recommendations and Salesforce workflows. This base has no live CRM sync, external account research, drag-and-drop org chart, email delivery or licensed prospect data. It is useful with owned records and exports; it does not claim to reproduce every vendor dashboard.
 
-| Command | What it does |
+## Recurring jobs
+
+| Command | Purpose |
 |---|---|
-| `/...` | ... |
+| /portfolio | Compare account reviews, decision-maker coverage and overdue actions. |
+| /reviews-due | Prepare the accounts whose quarterly review is due. |
+| /stakeholders | Read stakeholder roles, stances and contact history. |
+| /relationship-gaps | Find quiet relationships and unknown decision roles. |
+| /coverage | Read each business unit and product, including unknown coverage. |
+| /whitespace | Review unserved or competitor-held business units and their evidence. |
+| /plays | Read the growth plays and measurable customer outcomes. |
+| /actions | Read assigned account actions and their outcomes. |
+| /overdue | Find missed actions and the accountable owner. |
+| /compliance | Check purpose, accuracy and retention review evidence. |
+| /activity | Read the append-only operator activity log. |
+| /account | Read one account and all its planning records. |
+| /stakeholder | Read one stakeholder and the recorded interactions. |
+| /add-account | Open an owned account plan with its objective and review date. |
+| /add-stakeholder | Add a stakeholder with unverified influence and stance. |
+| /review-stakeholder | Record verified influence, stance, purpose and retention review. |
+| /depart-stakeholder | Mark a contact as departed and retain the reason. |
+| /assess-coverage | Record or revise evidence for one product and business unit. |
+| /add-play | Start a growth play with an owner and success measure. |
+| /add-action | Assign a dated action to an open play. |
+| /complete-action | Record the outcome of an action. |
+| /close-play | Close a play after every action is complete. |
+| /log-contact | Record a conversation that happened. |
+| /record-review | Save the review findings, a snapshot and next review date. |
+| /import | Validate and import Salesforce Account and Contact exports used by DemandFarm. |
+| /export | Save a complete private snapshot to a new file. |
+| /draft-account-plan | Prepare an internal account growth plan. |
+| /draft-review-agenda | Prepare an internal quarterly review agenda. |
+| /weekly-review | Draft the weekly review from review dates, relationship gaps and overdue actions. |
+| /help | List supported commands and arguments. |
+| /customise | Change fields or rules through a tested migration. |
+| /new-view | Add a branded read-only report from your own records. |
 
-## Instead of DemandFarm
+All 30 CLI commands support --json. The two agent recipes bring the total to 32 slash commands. Run npm run accounts -- help for arguments. Flags use --name=value. Names match without case sensitivity; partial IDs and names are accepted only when they identify one record. Ambiguous requests list candidates and exit with code 1. Dates use YYYY-MM-DD in UTC.
 
-<!-- TODO(author): how to bring data across from DemandFarm; link docs/replace-demandfarm.md -->
+## Ten questions your own records answer
 
-## Architecture
+1. Which accounts have overdue actions and no recorded decision-maker? (`portfolio`)
+2. Which reviews are overdue or have never been scheduled? (`reviews-due`)
+3. Which influential contacts have been quiet for more than thirty days? (`relationship-gaps`)
+4. Which business units are still marked unknown rather than unserved? (`coverage`)
+5. Which unserved units rely on an assessment older than ninety days? (`whitespace`)
+6. Which competitor-held units have a named product and supporting evidence? (`whitespace`)
+7. Which growth plays have a measurable outcome and an accountable owner? (`plays`)
+8. Which actions are overdue and who owns each one? (`overdue`)
+9. Which stakeholder records lack a purpose, current verification or retention review? (`compliance`)
+10. What did the account plan say at the last quarterly review? (`account A-001`)
 
-```
-key-account-planning-for-claude-code/
-  CLAUDE.md                 how the operator wants this run (routing table + house rules)
-  AGENTS.md                 the same, for Codex / OpenCode / Cursor / Gemini CLI
-  .claude/commands/         the slash commands
-  scripts/                  the CLI the commands drive
-  scripts/lib/db.mjs        one adapter: DATABASE_URL (pg) or embedded PGlite
-  supabase/migrations/      plain SQL schema
-  supabase/seed.sql         demo data
-  docs/                     the thesis and the migration guide
-```
+These are implemented questions, not a claim that DemandFarm cannot answer them. Owning the queries lets your team join evidence and change its own review rules.
 
-## Built for coding agents
+## Your first hour: ten things to ask for
 
-The database, CLI and command recipes work with Claude Code, Codex, OpenCode or Cursor. Ask your coding agent for a new command and have it implement and test the change against the same records.
+1. Put our business name and colours in brand.json.
+2. Show accounts with no recorded decision-maker.
+3. Show quiet champions before the next review.
+4. Show missed actions and the responsible owner.
+5. Separate unknown coverage from confirmed gaps.
+6. Show the evidence behind one expansion estimate.
+7. Prepare a quarterly review agenda.
+8. Test our Account and Contact exports and reconcile identifiers.
+9. Add our account tier through a tested migration.
+10. Export a private snapshot before changing the review policy.
 
-## Contributing
+## Move from DemandFarm
 
-Issues and pull requests are welcome. Keep the shape: plain SQL, a small CLI, a slash command per recurring job, no front end.
+[The replace guide](docs/replace-demandfarm.md) documents the one-command import of Salesforce Account.csv and Contact.csv for a Salesforce-native DemandFarm installation. Custom DemandFarm account plans, relationship attributes and coverage objects need a reviewed mapping, not a guessed file format. The fixtures are synthetic examples of the documented Salesforce fields, not a captured vendor export. Run a test import before committing to a switch.
 
-## Want it installed and run for you?
+Exact repeat imports are harmless. Changed existing source rows stop the whole import, as do duplicate identifiers and orphan contacts. The complete import rolls back on a failed row. Original columns and original CSV text are retained for reconciliation, so treat the database and snapshots as private. Imported contacts remain unverified; an imported title is not evidence of buying authority. Owner IDs stay IDs until mapped to people.
 
-Enterprise DNA installs Key Account Planning for Claude Code for your business, migrates your DemandFarm data, connects it to the rest of your tools, and runs it for you as part of **Omni**, our managed Command Center. One setup fee, then a monthly retainer.
+## Documents and views
 
-- Book a call: [enterprisedna.co/omni/book](https://enterprisedna.co/omni/book/?offer=replace-software&utm_source=github&utm_medium=readme&utm_campaign=demandfarm)
-- Read more: [enterprisedna.co/omni/instead-of/demandfarm](https://enterprisedna.co/omni/instead-of/demandfarm?utm_source=github&utm_medium=readme&utm_campaign=demandfarm)
+npm run docs produces account growth plans and quarterly review agendas as branded HTML. npm run view produces the weekly review, relationship coverage and whitespace reports. Edit brand.json to use your name, colours and logo. Reports are read-only, can be printed to PDF and remain local. Draft commands write to drafts/. They never send. Review content and recipients before sharing.
 
-## License
+[Compliance](docs/compliance.md) records the sourced privacy checks and their limits. [Why no front end](docs/why-no-front-end.md) describes mobile, offline and collaboration limitations. [Research](docs/research.md) records the selection evidence.
 
-MIT. Copyright (c) 2026 Enterprise DNA.
+## Validation and deployment
+
+npm test creates a temporary database, migrates twice, seeds twice and exercises every CLI command. It checks atomic imports, repeat and conflicting files, date validation, account boundaries, lifecycle closure, append-only history, snapshots, escaped HTML and CLI exit codes. CI is configured for Ubuntu and Windows on Node 20 and 22, plus PostgreSQL 17. Configuration is not proof of a hosted run; see the build report for executed checks. TEST_DATABASE_URL must point at an empty disposable database.
+
+This is a trusted-operator tool, not a multi-user application. Row-level security is enabled and PUBLIC privileges revoked on domain records and views. The database owner can bypass these restrictions. Supplied actor names are labels, not authenticated identities. Protect the host and credentials, restrict database access and choose a backup and retention policy before importing real records. Export writes a new complete JSON snapshot; restore is not automated. Use native backups too. Concurrency is serialized for CLI mutations; code or database-owner access can bypass application rules.
+
+## Licence
+
+MIT. Copyright 2026 Enterprise DNA. DemandFarm and Salesforce belong to their respective owners. No vendor code, customer records or licensed datasets are included.

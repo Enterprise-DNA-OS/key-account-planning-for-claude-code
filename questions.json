@@ -1,0 +1,42 @@
+[
+  {
+    "question": "Which accounts have overdue actions and no recorded decision-maker?",
+    "command": "portfolio"
+  },
+  {
+    "question": "Which reviews are overdue or have never been scheduled?",
+    "command": "reviews-due"
+  },
+  {
+    "question": "Which influential contacts have been quiet for more than thirty days?",
+    "command": "relationship-gaps"
+  },
+  {
+    "question": "Which business units are still marked unknown rather than unserved?",
+    "command": "coverage"
+  },
+  {
+    "question": "Which unserved units rely on an assessment older than ninety days?",
+    "command": "whitespace"
+  },
+  {
+    "question": "Which competitor-held units have a named product and supporting evidence?",
+    "command": "whitespace"
+  },
+  {
+    "question": "Which growth plays have a measurable outcome and an accountable owner?",
+    "command": "plays"
+  },
+  {
+    "question": "Which actions are overdue and who owns each one?",
+    "command": "overdue"
+  },
+  {
+    "question": "Which stakeholder records lack a purpose, current verification or retention review?",
+    "command": "compliance"
+  },
+  {
+    "question": "What did the account plan say at the last quarterly review?",
+    "command": "account A-001"
+  }
+]

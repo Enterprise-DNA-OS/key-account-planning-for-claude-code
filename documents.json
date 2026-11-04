@@ -1,11 +1,45 @@
 [
   {
-    "name": "example",
-    "title": "TODO(author): the first document this industry must produce",
-    "for_each": "select gen_random_uuid() as id, 'Example' as name",
+    "name": "account-plan",
+    "title": "Account growth plan",
+    "for_each": "select id,name from accounts where status='active' order by code",
     "file": "name",
     "sections": [
-      { "title": "Details", "sql": "select 'replace me' as item, $1::text as record_id" }
+      {
+        "title": "Account objective",
+        "sql": "select name,owner,objective,review_due from accounts where id=$1",
+        "layout": "record"
+      },
+      {
+        "title": "Growth plays",
+        "sql": "select name,owner,success_measure,due,status from plays where account_id=$1 order by due"
+      },
+      {
+        "title": "Coverage",
+        "note": "Internal planning estimates; check before sharing.",
+        "sql": "select business_unit,product,status,potential_cents,currency,attention from whitespace where account_id=$1 order by code"
+      }
+    ]
+  },
+  {
+    "name": "review-agenda",
+    "title": "Quarterly account review agenda",
+    "for_each": "select id,name from accounts where status='active' order by code",
+    "file": "name",
+    "sections": [
+      {
+        "title": "Account",
+        "layout": "record",
+        "sql": "select name,owner,objective,review_due from accounts where id=$1"
+      },
+      {
+        "title": "Actions to discuss",
+        "sql": "select name,owner,due,attention from action_queue where account_id=$1 and status='open' order by due"
+      },
+      {
+        "title": "Recent reviews",
+        "sql": "select note,next_due,actor,created_at from reviews where account_id=$1 order by created_at desc"
+      }
     ]
   }
 ]
